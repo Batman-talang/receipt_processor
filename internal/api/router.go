@@ -17,7 +17,7 @@ func NewRouter(svs ports.Receipt) *gin.Engine {
 	router := gin.Default()
 	setupSwagger(router)
 	router.Use(CORS())
-	router.POST("/receipts", h.ProcessReceipt)
+	router.POST("/receipts/process", h.ProcessReceipt)
 	router.GET("/receipts/:id/points", h.GetPoint)
 
 	return router
