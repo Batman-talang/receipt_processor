@@ -1,0 +1,38 @@
+# Build stage
+FROM golang:1.23 as builder
+
+WORKDIR /app
+
+# Copy the Go module files
+COPY go.mod go.sum ./
+
+# Download the Go module dependencies
+RUN go mod download
+
+# Copy the source code into the container
+COPY . ./
+
+# Update package lists and install ca-certificates
+RUN apt-get update --allow-insecure-repositories && apt-get install -y \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Build the Go application for amd64
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o main ./cmd/server
+
+# Final stage
+FROM scratch
+
+WORKDIR /app
+
+# Copy the built binary from the builder stage
+COPY --from=builder /app/main /app/main
+
+# Copy CA certificates from the builder stage
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+
+# Expose the Redis port
+EXPOSE 8080
+
+# Set the entrypoint to the built binary
+ENTRYPOINT ["/app/main

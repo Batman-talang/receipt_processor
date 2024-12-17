@@ -1,0 +1,103 @@
+basePath: /
+definitions:
+  models.Item:
+    properties:
+      price:
+        type: string
+      shortDescription:
+        type: string
+    type: object
+  models.Point:
+    properties:
+      points:
+        type: integer
+    type: object
+  models.Receipt:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/models.Item'
+        type: array
+      purchaseDate:
+        type: string
+      purchaseTime:
+        type: string
+      retailer:
+        type: string
+      total:
+        type: string
+    type: object
+info:
+  contact:
+    email: '-'
+    name: '-'
+    url: '-'
+  license:
+    name: MIT
+  title: Receipt Processor
+  version: "1.0"
+paths:
+  /receipts/{id}/points:
+    get:
+      consumes:
+      - application/json
+      description: Given a receipt ID, returns the number of points awarded to that
+        receipt.
+      parameters:
+      - description: Receipt ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Points awarded
+          schema:
+            $ref: '#/definitions/models.Point'
+        "404":
+          description: Receipt not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get Points
+      tags:
+      - Api-Services
+  /receipts/process:
+    post:
+      consumes:
+      - application/json
+      description: Takes in a JSON receipt and returns a JSON object with an ID generated
+        by the service. This ID can be used to retrieve the points awarded to the
+        receipt.
+      parameters:
+      - description: Receipt data
+        in: body
+        name: receipt
+        required: true
+        schema:
+          $ref: '#/definitions/models.Receipt'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: JSON with the generated receipt ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid JSON
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Process Receipts
+      tags:
+      - Api-Services
+schemes:
+- http
+- https
+swagger: "2.0"
