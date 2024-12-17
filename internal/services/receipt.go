@@ -86,10 +86,16 @@ func countAlphanumeric(s string) int {
 }
 
 func isRoundDollar(val float64) bool {
+	if val == 0 {
+		return false
+	}
 	return val == float64(int(val))
 }
 
 func isMultipleOfQuarter(val float64) bool {
+	if val == 0 {
+		return false
+	}
 	return math.Mod(val, 0.25) == 0
 }
 

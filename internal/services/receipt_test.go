@@ -99,7 +99,7 @@ func TestCalculatePoints(t *testing.T) {
 			id := svc.CalculatePoints(tt.receipt)
 			points, found := svc.GetPoints(id)
 			assert.Equal(t, found, true)
-			assert.Equal(t, tt.expected, points)
+			assert.Equal(t, tt.expected, points.Points)
 		})
 	}
 }

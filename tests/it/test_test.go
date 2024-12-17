@@ -56,6 +56,6 @@ func (s *ReceiptTestSuite) TestPoints() {
 	s.Require().NotEqual(id, "")
 	points, found := s.svc.GetPoints(id)
 	s.Require().True(found)
-	s.Require().Equal(points, 28)
+	s.Require().Equal(points.Points, 28)
 
 }
